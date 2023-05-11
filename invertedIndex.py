@@ -1,3 +1,4 @@
+from pathlib import Path
 import zipfile
 import json
 import os
@@ -38,35 +39,53 @@ class Posting:
 
 
 #Starts the program
-if name == 'main':
+if __name__ == '__main__':
     #Create a blank inverted index
     invertedTokenIndex = InvertedIndex()
 
     #Path to the Dev file provided by professor.
     devDirect = 'path/to/dev'
     fileCounter = 0
+    docid = 0
     for subdirectories in Path(devDirect).iterdir():
         if subdirectories.is_dir():
             for file in Path(subdirectories).iterdir():
                 jsonfile = open(file, "r")
-                print(jsonfile)
                 fileCounter += 1
                 jsonData = json.load(jsonfile)
-    print(fileCounter)
+                #Parse through the body content/ content within the json file
+                soup = BeautifulSoup(jsonData["content"], 'html.parser')
+                bodyContent = soup.get_text()
 
 
-            #Parse through the body content/ content within the json file
-            soup = BeautifulSoup(jsonData["content"], 'html.parser')
-            bodyContent = soup.get_text()
+                #Tokenize the bodyContent here
+                updated_text_string = re.findall("[^a-zA-Z0-9']", " ", bodyContent)
+                tokens = updated_text_string.split()
+                
 
+
+    # for devDirect, subdirectories, devFiles in os.walk(devDirect):
+    #     #Inner for loop which goes through each subdirectory in Dev file
+    #     for jsonFile in subdirectories:
+    #         for devDirect2, subdirectories2, devFiles2 in os.walk(os.path.join(devDirect, jsonFile)):
+    #             #Load the json file into a dictionary object using json import
+    #             for actualFile in subdirectories2:
+    #                 print(actualFile)
+                    # file = open(actualFile, "r")
+                    # jsonData = json.load(file)
+                    # fileCounter += 1
+
+
+                    #     #Parse through the content within the json file
+                    #     #soup = BeautifulSoup(jsonData["content"], 'html.parser')
+                    #     #bodyContent = soup.get_text()
+
+                    # print("File could not be opened or does not exist") 
+
+
+            #Parse through the bodyContent here
 
             #Tokenize the bodyContent here
-            updated_text_string = re.findall("[^a-zA-Z0-9']", " ", bodyContent)
-            tokens = updated_text_string.split()
-            
-            
-            #except should be here ??
-            
 
             #Create Posting objects. Add them to the invertedIndex object
 
