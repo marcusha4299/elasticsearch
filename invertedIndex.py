@@ -48,7 +48,12 @@ if __name__ == '__main__':
         #Inner for loop which goes through each subdirectory in Dev file
         for jsonFile in subdirectories:
             #Load the json file into a dictionary object using json import
-            jsonData = json.load(jsonFile)
+            try:
+                file = open(jsonFile, "r")
+            except:
+                #If file cannot be opened:
+                print("File could not be opened or does not exist") 
+            jsonData = json.load(file)
             fileCounter += 1
 
 
