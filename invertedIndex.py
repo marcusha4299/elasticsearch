@@ -1,6 +1,7 @@
 import zipfile
 import json
 import os
+import re
 
 from bs4 import BeautifulSoup
 
@@ -37,34 +38,35 @@ class Posting:
 
 
 #Starts the program
-if __name__ == '__main__':
+if name == 'main':
     #Create a blank inverted index
     invertedTokenIndex = InvertedIndex()
 
     #Path to the Dev file provided by professor.
     devDirect = 'path/to/dev'
     fileCounter = 0
-    for devDirect, subdirectories, devFiles in os.walk(devDirect):
-        #Inner for loop which goes through each subdirectory in Dev file
-        for jsonFile in subdirectories:
-            #Load the json file into a dictionary object using json import
-            try:
-                file = open(jsonFile, "r")
-            except:
-                #If file cannot be opened:
-                print("File could not be opened or does not exist") 
-            jsonData = json.load(file)
-            fileCounter += 1
+    for subdirectories in Path(devDirect).iterdir():
+        if subdirectories.is_dir():
+            for file in Path(subdirectories).iterdir():
+                jsonfile = open(file, "r")
+                print(jsonfile)
+                fileCounter += 1
+                jsonData = json.load(jsonfile)
+    print(fileCounter)
 
 
-            #Parse through the content within the json file
+            #Parse through the body content/ content within the json file
             soup = BeautifulSoup(jsonData["content"], 'html.parser')
             bodyContent = soup.get_text()
 
 
-            #Parse through the bodyContent here
-
             #Tokenize the bodyContent here
+            updated_text_string = re.findall("[^a-zA-Z0-9']", " ", bodyContent)
+            tokens = updated_text_string.split()
+            
+            
+            #except should be here ??
+            
 
             #Create Posting objects. Add them to the invertedIndex object
 
