@@ -1,5 +1,7 @@
 import zipfile
 import json
+import os
+
 from bs4 import BeautifulSoup
 
 class InvertedIndex:
@@ -39,16 +41,21 @@ if __name__ == '__main__':
     #Create a blank inverted index
     invertedTokenIndex = InvertedIndex()
 
-    #Runs through the zip file and gets the file info
-    with zipfile.ZipFile("developer.zip", "r") as files:
-        for fileName in files.namelist():
-            #Load the json data into an dict object
-            jsonData = json.load(fileName)
+    #Path to the Dev file provided by professor.
+    devDirect = 'path/to/dev'
+    fileCounter = 0
+    for devDirect, subdirectories, devFiles in os.walk(devDirect):
+        #Inner for loop which goes through each subdirectory in Dev file
+        for jsonFile in subdirectories:
+            #Load the json file into a dictionary object using json import
+            jsonData = json.load(jsonFile)
+            fileCounter += 1
 
-            #jsonData = "url", "content", "encoding"
-            #Parse through the Content within the json file
+
+            #Parse through the content within the json file
             soup = BeautifulSoup(jsonData["content"], 'html.parser')
             bodyContent = soup.get_text()
+
 
             #Parse through the bodyContent here
 
@@ -60,7 +67,7 @@ if __name__ == '__main__':
 
 
             #End of dealing with this class object
-    pass
+    print(fileCounter)
 
 #Zip -> folder -> json files
 #Zip -> json files
