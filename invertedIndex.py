@@ -70,24 +70,30 @@ if __name__ == '__main__':
     docIndex = dict()
 
     #Path to the Dev file provided by professor.
-    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
+    devDirect = 'DEV'
     docid = 0
+    index_size = 0
     for subdirectories in Path(devDirect).iterdir():
         if subdirectories.is_dir():
             for file in Path(subdirectories).iterdir():
-
-                if((docid % 5000 == 0) and (docid != 0)):
-                    #Transfer to the tokenfile
-                    with open("m1invertedindex" + str(docid) + ".json" , "w") as invertedfile:
+                if ((docid % 5000 == 0) and (docid != 0)):
+                # Transfer to the tokenfile
+                    invertedfilename = "m1invertedindex" + str(docid) + ".json"
+                    with open(invertedfilename, "w") as invertedfile:
                         json.dump(invertedTokenIndex.get_inverted_index(), invertedfile)
-                
-                    #Dumps the DocIndex into a json file, used for search querying later on
-                    with open("m1docindex" + str(docid) + ".json", "w") as docindexfile:
+
+                # Dumps the DocIndex into a json file, used for search querying later on
+                    docindexfilename = "m1docindex" + str(docid) + ".json"
+                    with open(docindexfilename, "w") as docindexfile:
                         json.dump(docIndex, docindexfile)
 
+                # Update the index size
+                    index_size += os.path.getsize(invertedfilename)
+                    index_size += os.path.getsize(docindexfilename)
+
                     #Wipe the invertedTokenIndex & Doc index
-                    invertedTokenIndex = InvertedIndex()
-                    docIndex = dict()
+                invertedTokenIndex = InvertedIndex()
+                docIndex = dict()
 
                 jsonfile = open(file, "r")
                 #Updates the DocID for a new file
@@ -134,6 +140,8 @@ if __name__ == '__main__':
     print("1. Number of indexed Documents:  " + str(docid))
     #Prints how many unique words there are (M1 only, delete later)
     print("2. Number of unique words:  " + str(invertedTokenIndex.get_total_tokens()))
+    index_size_kb = index_size / 1024
+    print("3. Total index size on disk: {:.2f} KB".format(index_size_kb))
 
     #Dumps the InvertedIndex into a json file, used for search querying and storage later on.
     with open("m1invertedindexEnd.json", "w") as invertedfile:
