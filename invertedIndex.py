@@ -45,6 +45,10 @@ class InvertedIndex:
     #Don't do for M1
     def check_tfidf(self, doc_name, term): #check the tf-idf score
         pass
+    
+    #Clears the inverted index
+    def clear_token_map(self):
+        self.token_map.clear()
 
 """
 #Class that holds a DocID & associated frequency.
@@ -68,9 +72,11 @@ if __name__ == '__main__':
     invertedTokenIndex = InvertedIndex()
     #Create a dictionary which holds the docIDs with their associated URLs
     docIndex = dict()
+    #Store unique tokens
+    unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
+    devDirect = '/home/jayl9/elasticsearch/DEV'
     docid = 0
     for subdirectories in Path(devDirect).iterdir():
         if subdirectories.is_dir():
@@ -86,8 +92,8 @@ if __name__ == '__main__':
                         json.dump(docIndex, docindexfile)
 
                     #Wipe the invertedTokenIndex & Doc index
-                    invertedTokenIndex = InvertedIndex()
-                    docIndex = dict()
+                    invertedTokenIndex.clear_token_map()
+                    docIndex.clear()
 
                 jsonfile = open(file, "r")
                 #Updates the DocID for a new file
@@ -117,6 +123,7 @@ if __name__ == '__main__':
 
                 #Puts the tokens from the list into the temp dictionary with frequencies
                 for token in lowerTokenList:
+                    unique_tokens.add(token)
                     if token not in tempTokenDictionary:
                         tempTokenDictionary[token] = 1
                     else:
@@ -133,7 +140,7 @@ if __name__ == '__main__':
     #Prints how many docs we went through (testing only, delete later)
     print("1. Number of indexed Documents:  " + str(docid))
     #Prints how many unique words there are (M1 only, delete later)
-    print("2. Number of unique words:  " + str(invertedTokenIndex.get_total_tokens()))
+    print("2. Number of unique words:  " + str(len(unique_tokens)))
 
     #Dumps the InvertedIndex into a json file, used for search querying and storage later on.
     with open("m1invertedindexEnd.json", "w") as invertedfile:
