@@ -44,7 +44,7 @@ if __name__ == '__main__':
     invertedTokenIndex = InvertedIndex()
 
     #Path to the Dev file provided by professor.
-    devDirect = 'path/to/dev'
+    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
     fileCounter = 0
     docid = 0
     for subdirectories in Path(devDirect).iterdir():
@@ -53,14 +53,14 @@ if __name__ == '__main__':
                 jsonfile = open(file, "r")
                 fileCounter += 1
                 jsonData = json.load(jsonfile)
-                #Parse through the body content/ content within the json file
+                """#Parse through the body content/ content within the json file
                 soup = BeautifulSoup(jsonData["content"], 'html.parser')
                 bodyContent = soup.get_text()
 
 
                 #Tokenize the bodyContent here
                 updated_text_string = re.findall("[^a-zA-Z0-9']", " ", bodyContent)
-                tokens = updated_text_string.split()
+                tokens = updated_text_string.split()"""
                 
 
 
