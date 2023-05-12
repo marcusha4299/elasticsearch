@@ -76,7 +76,7 @@ if __name__ == '__main__':
     unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = 'DEV'
+    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
     docid = 0
     index_size = 0
     for subdirectories in Path(devDirect).iterdir():
@@ -99,8 +99,8 @@ if __name__ == '__main__':
                     index_size += os.path.getsize(docindexfilename)
 
                     #Wipe the invertedTokenIndex & Doc index
-                invertedTokenIndex.clear_token_map()
-                docIndex.clear()
+                    invertedTokenIndex.clear_token_map()
+                    docIndex.clear()
                     
 
                 jsonfile = open(file, "r")
