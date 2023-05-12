@@ -45,6 +45,10 @@ class InvertedIndex:
     #Don't do for M1
     def check_tfidf(self, doc_name, term): #check the tf-idf score
         pass
+    
+    #Clears the inverted index
+    def clear_token_map(self):
+        self.token_map.clear()
 
 """
 #Class that holds a DocID & associated frequency.
@@ -68,32 +72,28 @@ if __name__ == '__main__':
     invertedTokenIndex = InvertedIndex()
     #Create a dictionary which holds the docIDs with their associated URLs
     docIndex = dict()
+    #Store unique tokens
+    unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = 'DEV'
+    devDirect = '/home/jayl9/elasticsearch/DEV'
     docid = 0
-    index_size = 0
     for subdirectories in Path(devDirect).iterdir():
         if subdirectories.is_dir():
             for file in Path(subdirectories).iterdir():
-                if ((docid % 5000 == 0) and (docid != 0)):
-                # Transfer to the tokenfile
-                    invertedfilename = "m1invertedindex" + str(docid) + ".json"
-                    with open(invertedfilename, "w") as invertedfile:
-                        json.dump(invertedTokenIndex.get_inverted_index(), invertedfile)
 
-                # Dumps the DocIndex into a json file, used for search querying later on
-                    docindexfilename = "m1docindex" + str(docid) + ".json"
-                    with open(docindexfilename, "w") as docindexfile:
+                if((docid % 5000 == 0) and (docid != 0)):
+                    #Transfer to the tokenfile
+                    with open("m1invertedindex" + str(docid) + ".json" , "w") as invertedfile:
+                        json.dump(invertedTokenIndex.get_inverted_index(), invertedfile)
+                
+                    #Dumps the DocIndex into a json file, used for search querying later on
+                    with open("m1docindex" + str(docid) + ".json", "w") as docindexfile:
                         json.dump(docIndex, docindexfile)
 
-                # Update the index size
-                    index_size += os.path.getsize(invertedfilename)
-                    index_size += os.path.getsize(docindexfilename)
-
                     #Wipe the invertedTokenIndex & Doc index
-                invertedTokenIndex = InvertedIndex()
-                docIndex = dict()
+                    invertedTokenIndex.clear_token_map()
+                    docIndex.clear()
 
                 jsonfile = open(file, "r")
                 #Updates the DocID for a new file
@@ -123,6 +123,7 @@ if __name__ == '__main__':
 
                 #Puts the tokens from the list into the temp dictionary with frequencies
                 for token in lowerTokenList:
+                    unique_tokens.add(token)
                     if token not in tempTokenDictionary:
                         tempTokenDictionary[token] = 1
                     else:
@@ -139,9 +140,7 @@ if __name__ == '__main__':
     #Prints how many docs we went through (testing only, delete later)
     print("1. Number of indexed Documents:  " + str(docid))
     #Prints how many unique words there are (M1 only, delete later)
-    print("2. Number of unique words:  " + str(invertedTokenIndex.get_total_tokens()))
-    index_size_kb = index_size / 1024
-    print("3. Total index size on disk: {:.2f} KB".format(index_size_kb))
+    print("2. Number of unique words:  " + str(len(unique_tokens)))
 
     #Dumps the InvertedIndex into a json file, used for search querying and storage later on.
     with open("m1invertedindexEnd.json", "w") as invertedfile:
@@ -156,3 +155,4 @@ if __name__ == '__main__':
 #git test
 #git test 2 
 #git test 3
+#git test 4
