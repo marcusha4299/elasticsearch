@@ -6,6 +6,9 @@ import re
 
 from bs4 import BeautifulSoup
 
+from cosSim import*
+
+
 class InvertedIndex:
     #Token: [Postings]
     #In depth Example:
@@ -99,8 +102,8 @@ if __name__ == '__main__':
                     index_size += os.path.getsize(docindexfilename)
 
                     #Wipe the invertedTokenIndex & Doc index
-                invertedTokenIndex.clear_token_map()
-                docIndex.clear()
+                    invertedTokenIndex.clear_token_map()
+                    docIndex.clear()
                     
 
                 jsonfile = open(file, "r")
