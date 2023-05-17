@@ -6,9 +6,6 @@ import re
 
 from bs4 import BeautifulSoup
 
-from cosSim import*
-
-
 class InvertedIndex:
     #Token: [Postings]
     #In depth Example:
@@ -79,7 +76,7 @@ if __name__ == '__main__':
     unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = 'DEV'
+    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
     docid = 0
     index_size = 0
     for subdirectories in Path(devDirect).iterdir():
