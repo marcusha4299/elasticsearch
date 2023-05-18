@@ -76,7 +76,7 @@ if __name__ == '__main__':
     unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = '/home/vanoverc/INF141/Assignment3/elasticsearch/DEV'
+    devDirect = 'DEV'
     docid = 0
     index_size = 0
     for subdirectories in Path(devDirect).iterdir():
@@ -87,7 +87,7 @@ if __name__ == '__main__':
                     #Transfer to the tokenfile
                     invertedfilename = "m1invertedindex" + str(docid) + ".json"
                     with open(invertedfilename, "w") as invertedfile:
-                        json.dump(invertedTokenIndex.get_inverted_index(), invertedfile)
+                        json.dump(dict(sorted(invertedTokenIndex.get_inverted_index().items())), invertedfile)
                 
                     #Dumps the DocIndex into a json file, used for search querying later on
                     docindexfilename = "m1docindex" + str(docid) + ".json"
@@ -154,7 +154,7 @@ if __name__ == '__main__':
 
     #Dumps the InvertedIndex into a json file, used for search querying and storage later on.
     with open("m1invertedindexEnd.json", "w") as invertedfile:
-        json.dump(invertedTokenIndex.get_inverted_index(), invertedfile)
+        json.dump(dict(sorted(invertedTokenIndex.get_inverted_index().items())), invertedfile)
     
     #Dumps the DocIndex into a json file, used for search querying later on
     with open("m1docindex.json", "w") as docindexfile:
