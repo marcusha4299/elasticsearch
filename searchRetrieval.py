@@ -9,6 +9,8 @@ if __name__ == '__main__':
         docid_index = json.load(merged_docid_file)
     
     query_word_list = input("What is your query?: \n").lower().split()
+
+    #check if the query has stop words and remove them for M3
     
     #scenario 1: find queries of length 1
     if len(query_word_list) == 1:
@@ -49,16 +51,18 @@ if __name__ == '__main__':
         common_url_list = inverted_index[rankings_list[0][0]]
         #loop through all the other postings lists excluding the lowest length one
         for i in range(1, len(rankings_list)):
-            #list to store docids for a term from its postings list
-            docid_list = []
+            #dictionary to store docids for a term from its postings list
+            docid_dict = dict()
             #loop to get all docids for a term from its postings list
             for tup in inverted_index[rankings_list[i][0]]:
-                docid_list.append(tup[0])
-            #check if all docids from the common url list is in the docid list for all other terms
+                docid_dict[tup[0]] = tup[1]
+            #check if all docids from the common url list is in the docid dictionary for all other terms
             for posting in common_url_list:
-                #if docid is not in the docid list for another term, remove the posting tuple
-                if posting[0] not in docid_list:
+                #if docid is not in the docid dictionary for another term, remove the posting tuple
+                if posting[0] not in docid_dict:
                     common_url_list.remove(posting)
+                else:
+                    posting[1] += docid_dict[posting[0]]
         #sort the common urls by term frequency, but only for the term with lowest length postings list
         common_url_list.sort(key = lambda x: x[1], reverse = True)
         #list to store the returned urls
