@@ -3,6 +3,8 @@ import zipfile
 import json
 import os
 import re
+import nltk
+from nltk.stem import PorterStemmer
 
 from bs4 import BeautifulSoup
 
@@ -129,13 +131,17 @@ if __name__ == '__main__':
                 #Creates a temporary dictionary for holding frequency of each token, will be used to create postings later.
                 tempTokenDictionary = dict()
 
+                #create a porter stemmer object
+                ps = PorterStemmer()
+
                 #Puts the tokens from the list into the temp dictionary with frequencies
                 for token in lowerTokenList:
-                    unique_tokens.add(token)
-                    if token not in tempTokenDictionary:
-                        tempTokenDictionary[token] = 1
+                    stemmed_token = ps.stem(token)
+                    unique_tokens.add(stemmed_token)
+                    if stemmed_token not in tempTokenDictionary:
+                        tempTokenDictionary[stemmed_token] = 1
                     else:
-                        tempTokenDictionary[token] += 1
+                        tempTokenDictionary[stemmed_token] += 1
 
                 #Add the postings to the inverted index
                 for token, frequency in tempTokenDictionary.items():
