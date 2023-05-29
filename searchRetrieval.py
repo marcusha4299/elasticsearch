@@ -1,5 +1,5 @@
 import json
-
+import time
 
 if __name__ == '__main__':
     with open('merged_invertedindex.json', 'r') as merged_index_file:
@@ -9,6 +9,8 @@ if __name__ == '__main__':
         docid_index = json.load(merged_docid_file)
     
     query_word_list = input("What is your query?: \n").lower().split()
+    
+    start_time = time.time()
 
     #check if the query has stop words and remove them for M3
     
@@ -80,3 +82,8 @@ if __name__ == '__main__':
         print('Results for ' + full_query + ' are:')
         for url in results:
             print(url)
+        
+    end_time = time.time()
+    elapsed_time = (end_time - start_time)*1000
+    print("Search completed in {:.4f} ms".format(elapsed_time))
+        
