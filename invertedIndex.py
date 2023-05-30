@@ -1,9 +1,7 @@
 from pathlib import Path
-import zipfile
 import json
 import os
 import re
-import nltk
 from nltk.stem import PorterStemmer
 
 from bs4 import BeautifulSoup
@@ -78,7 +76,7 @@ if __name__ == '__main__':
     unique_tokens = set()
 
     #Path to the Dev file provided by professor.
-    devDirect = 'DEV'
+    devDirect = '/home/jayl9/elasticsearch/DEV'
     docid = 0
     index_size = 0
     for subdirectories in Path(devDirect).iterdir():
@@ -130,11 +128,34 @@ if __name__ == '__main__':
 
                 #Creates a temporary dictionary for holding frequency of each token, will be used to create postings later.
                 tempTokenDictionary = dict()
-
+                
                 #create a porter stemmer object
                 ps = PorterStemmer()
 
-                #Puts the tokens from the list into the temp dictionary with frequencies
+                #set for all the important tokens
+                important_words = set()
+
+                #list of important tags
+                important_tags = ['h1','h2','h3','strong','b','title']
+
+                #loop through all the tags
+                for tag in important_tags:
+                    #loop through all elements of that tag
+                    for element in soup.find_all(tag):
+                        #convert it to a string
+                        important_string = element.string
+                        #check if string is not none
+                        if important_string is not None:
+                            #convert string into a list of lower case words
+                            important_string_list = important_string.lower().split()
+                            #loop through all the words in the list
+                            for word in important_string_list:
+                                #stem the word
+                                stemmed_word = ps.stem(word)
+                                #add the stemmed word into the set of important words
+                                important_words.add(stemmed_word)
+                
+                #Puts the stemmed tokens from the list into the temp dictionary with frequencies
                 for token in lowerTokenList:
                     stemmed_token = ps.stem(token)
                     unique_tokens.add(stemmed_token)
@@ -145,7 +166,10 @@ if __name__ == '__main__':
 
                 #Add the postings to the inverted index
                 for token, frequency in tempTokenDictionary.items():
-                    posting = (docid, frequency)
+                    isImportant = False
+                    if token in important_words:
+                        isImportant = True
+                    posting = (docid, frequency, isImportant)
                     invertedTokenIndex.add_document(token, posting)
 
                 #Closes the file
