@@ -166,9 +166,9 @@ if __name__ == '__main__':
 
                 #Add the postings to the inverted index
                 for token, frequency in tempTokenDictionary.items():
-                    isImportant = False
+                    isImportant = 0
                     if token in important_words:
-                        isImportant = True
+                        isImportant = 1
                     posting = (docid, frequency, isImportant)
                     invertedTokenIndex.add_document(token, posting)
 
