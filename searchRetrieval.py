@@ -56,8 +56,10 @@ def search():
     #scenario 1: find queries of length 1
     #check if query is not in the inverted index
     if len(stemmed_query_list) == 0:
-        print('No search results for: ' + query_word_list[0])
-        console_output.append('No search results for: ' + query_word_list[0])
+        total_results_found = 0
+        results = []
+        print('No search results for: ' + query_word_string)
+        console_output.append('No search results for: ' + query_word_string)
     #if query is in the inverted index and is length 1
     elif len(stemmed_query_list) == 1:
         #list to store the returned urls
@@ -85,8 +87,8 @@ def search():
             for tup in posting_list:
                 results.append(docid_index[str(tup[0])])
         #print the url results
-        print('Results for ' + query_word_list[0] + ' are:')
-        console_output.append('Results for ' + query_word_list[0] + ' are:')
+        print('Results for ' + query_word_string + ' are:')
+        console_output.append('Results for ' + query_word_string + ' are:')
         for url in results:
             print(url)
             console_output.append(url)
@@ -149,9 +151,8 @@ def search():
             for tup in common_url_list:
                 results.append(docid_index[str(tup[0])])
         #print the url results
-        full_query = ' '.join(query_word_list)
-        print('Results for ' + full_query + ' are:')
-        console_output.append('Results for ' + full_query + ' are:')
+        print('Results for ' + query_word_string + ' are:')
+        console_output.append('Results for ' + query_word_string + ' are:')
         for url in results:
             print(url)
             console_output.append(url)
