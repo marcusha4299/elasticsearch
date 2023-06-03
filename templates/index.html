@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Engine</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function executed when the document has finished loading
+            $('form').submit(function (event) {
+                // Function executed when the form is submitted
+                event.preventDefault();
+                var query = $('#query').val();
+                $.ajax({
+                    // Sends an AJAX request to server
+                    type: 'POST',
+                    url: '/search',
+                    data: { query: query },
+                    success: function (response) {
+                        // Function executed when the request is successful
+                        $('#console-output').empty();
+                        $.each(response.console_output, function (index, value) {
+                            $('#console-output').append('<p>' + value + '</p>');
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Search:</h1>
+    <form method="POST" action="/search">
+        <!-- sends a search URL when submitted -->
+        <input type="text" id="query" name="query" placeholder="Enter your query">
+        <!-- input field for the user to enter the query -->
+        <input type="submit" value="Search">
+        <!-- A submit button to trigger the form submission -->
+    </form>
+    <h2>Result:</h2>
+    <div id="console-output"></div>
+</body>
+
+</html>
