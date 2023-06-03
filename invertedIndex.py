@@ -20,51 +20,10 @@ class InvertedIndex:
             self.token_map[token].append(posting)
         else:
             self.token_map[token] = [posting]
-
-    def get_posting(self, term): #return a posting list for a given term
-        if term in self.token_map:
-            return self.token_map[term]
-        
-    def get_highest_token_frequency(self, term): #return document frequency 
-        highestFreq = 0
-        doc = -1
-        #Checks if the term is in the dictionary, if so, returns the docID of the one with the highest frequency.
-        if term not in self.token_map:
-            print("There is no documents associated with that token")
-            return doc
-        else:
-            for eachPosting in self.token_map[term]:
-                if eachPosting.getFrequency() > highestFreq:
-                    highestFreq = eachPosting[1]
-                    doc = eachPosting[0]
-            return doc
-        
-    def get_total_tokens(self): #Returns the number of tokens in the inverted index
-        return len(self.token_map)
-
-    #Don't do for M1
-    def check_tfidf(self, doc_name, term): #check the tf-idf score
-        pass
-    
+   
     #Clears the inverted index
     def clear_token_map(self):
         self.token_map.clear()
-
-"""
-#Class that holds a DocID & associated frequency.
-class Posting:
-    def __init__(self, docid, frequency):
-        self.docid = docid
-        self.frequency = frequency
-    #Returns ID
-    def getid(self):
-        return self.docid
-    #Returns Frequency
-    def getFrequency(self):
-        return self.frequency
-"""
-
-
 
 #Starts the program
 if __name__ == '__main__':
@@ -189,12 +148,3 @@ if __name__ == '__main__':
     #Dumps the DocIndex into a json file, used for search querying later on
     with open("m1docindex.json", "w") as docindexfile:
         json.dump(docIndex, docindexfile)
-
-#Zip -> folder -> json files
-#Zip -> json files
-#git test
-#git test 2 
-#git test 3
-#git test 4
-#git test 5
-#git test 6
